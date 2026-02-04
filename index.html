@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Планировщик недель</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar__header">
+        <h1>WeekBoard</h1>
+        <button class="icon-button" id="toggleSidebar" aria-label="Скрыть меню">⟨⟩</button>
+      </div>
+      <nav class="sidebar__nav">
+        <button class="nav-link active" data-section="dashboard">Главная</button>
+        <button class="nav-link" data-section="profile">Профиль</button>
+        <button class="nav-link" data-section="settings">Настройки</button>
+        <button class="nav-link" data-section="tasks">Задачи</button>
+      </nav>
+      <div class="sidebar__footer">
+        <div class="user-chip" id="userChip">Гость</div>
+        <button class="ghost-button" id="logoutButton">Выйти</button>
+      </div>
+    </aside>
+
+    <main class="content">
+      <header class="content__header">
+        <div>
+          <h2 id="pageTitle">Календарь недель</h2>
+          <p id="pageSubtitle">Просмотр занятости по неделям и годам.</p>
+        </div>
+        <div class="header-actions">
+          <button class="ghost-button" id="openAuth">Войти / Регистрация</button>
+        </div>
+      </header>
+
+      <section class="section section--active" id="section-dashboard">
+        <div class="card">
+          <div class="card__header">
+            <div>
+              <h3>Таблица недель</h3>
+              <p>Кликните на неделю, чтобы открыть дневник.</p>
+            </div>
+            <div class="card__actions">
+              <label class="select-label">
+                Годы
+                <select id="yearRange">
+                  <option value="10">10 лет</option>
+                  <option value="20" selected>20 лет</option>
+                  <option value="50">50 лет</option>
+                </select>
+              </label>
+              <label class="select-label">
+                Начальный год
+                <select id="startYear"></select>
+              </label>
+            </div>
+          </div>
+          <div class="weeks-grid" id="weeksGrid"></div>
+        </div>
+
+        <div class="card" id="weekView">
+          <div class="card__header">
+            <div>
+              <h3 id="weekTitle">Неделя</h3>
+              <p>Недельный обзор с задачами и временем.</p>
+            </div>
+            <div class="card__actions">
+              <button class="ghost-button" id="backToGrid">← К таблице</button>
+            </div>
+          </div>
+          <div class="week-days" id="weekDays"></div>
+        </div>
+
+        <div class="card" id="dayView">
+          <div class="card__header">
+            <div>
+              <h3 id="dayTitle">День</h3>
+              <p>Подробности задач, дедлайны и описание.</p>
+            </div>
+            <div class="card__actions">
+              <button class="ghost-button" id="backToWeek">← К неделе</button>
+            </div>
+          </div>
+          <div class="task-list" id="dayTasks"></div>
+        </div>
+      </section>
+
+      <section class="section" id="section-profile">
+        <div class="card">
+          <div class="card__header">
+            <div>
+              <h3>Профиль</h3>
+              <p>Редактируйте личные данные.</p>
+            </div>
+          </div>
+          <form class="form" id="profileForm">
+            <label>
+              ФИО
+              <input type="text" name="fullName" placeholder="Иванов Иван" />
+            </label>
+            <label>
+              Год рождения
+              <input type="number" name="birthYear" min="1900" max="2025" />
+            </label>
+            <label>
+              Фото (URL)
+              <input type="url" name="avatar" placeholder="https://" />
+            </label>
+            <label>
+              Почта
+              <input type="email" name="email" placeholder="email@example.com" />
+            </label>
+            <button type="submit" class="primary-button">Сохранить</button>
+          </form>
+        </div>
+      </section>
+
+      <section class="section" id="section-settings">
+        <div class="card">
+          <div class="card__header">
+            <div>
+              <h3>Настройки</h3>
+              <p>Управляйте отображением и временем.</p>
+            </div>
+          </div>
+          <form class="form" id="settingsForm">
+            <label>
+              Время
+              <input type="time" name="time" />
+            </label>
+            <label>
+              Дата
+              <input type="date" name="date" />
+            </label>
+            <label>
+              Формат даты
+              <select name="dateFormat">
+                <option value="dd.mm.yyyy">ДД.ММ.ГГГГ</option>
+                <option value="yyyy-mm-dd">ГГГГ-ММ-ДД</option>
+              </select>
+            </label>
+            <label>
+              Цвет фона
+              <input type="color" name="background" value="#f6f7fb" />
+            </label>
+            <button type="submit" class="primary-button">Применить</button>
+          </form>
+        </div>
+      </section>
+
+      <section class="section" id="section-tasks">
+        <div class="card">
+          <div class="card__header">
+            <div>
+              <h3>Задачи</h3>
+              <p>Просмотр актуальных, просроченных и закрытых задач.</p>
+            </div>
+            <div class="card__actions">
+              <select id="taskFilter">
+                <option value="active">Актуальные</option>
+                <option value="overdue">Просроченные</option>
+                <option value="done">Закрытые</option>
+              </select>
+            </div>
+          </div>
+          <div class="task-list" id="tasksOverview"></div>
+        </div>
+        <div class="card">
+          <div class="card__header">
+            <div>
+              <h3>Администрирование</h3>
+              <p>Администратор может выдавать доступ на просмотр задач.</p>
+            </div>
+          </div>
+          <div class="admin-panel" id="adminPanel"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="authDialog">
+    <form method="dialog" class="auth">
+      <div class="auth__header">
+        <h3>Вход и регистрация</h3>
+        <button class="icon-button" value="cancel">✕</button>
+      </div>
+      <label>
+        Почта
+        <input type="email" id="authEmail" required />
+      </label>
+      <label>
+        Пароль
+        <input type="password" id="authPassword" required />
+      </label>
+      <div class="auth__actions">
+        <button class="primary-button" id="loginButton" value="default">Войти</button>
+        <button class="ghost-button" id="registerButton" value="default">Регистрация</button>
+        <button class="ghost-button" id="resetButton" value="default">Сбросить пароль</button>
+      </div>
+      <p class="auth__hint" id="authHint"></p>
+    </form>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
